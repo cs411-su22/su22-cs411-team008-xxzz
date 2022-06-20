@@ -13,4 +13,4 @@ Eash submission should be in it's own [release](https://docs.github.com/en/repos
 You should make sure you keep your project root files up-to-date. Information for each file/folders are explained.
 
 ## Code Contribution
-Individual code contribution will be used to evaluate individual contribution to the project.
+Individual code contribution will be used to evaluate individual contribution to the project. 
