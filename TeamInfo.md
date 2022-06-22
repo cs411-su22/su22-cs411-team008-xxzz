@@ -19,9 +19,11 @@
 
 |   Info      |        Description     |
 | ----------- | ---------------------- |
-|  Title      |       ProjectTitle     |
+|  Title      |         WatchDojo      |
 | System URL  |      link_to_system    |
 | Video Link  |      link_to_video     |
 
 ## Project Summary
-Please put your project summary here
+The goal of this project is to build a database-supported web application that allows users to freely explore TV shows and movies. We will start from both the front-end and back-end to build up an interactive web application. 
+
+The dataset for this project is collected from Kaggle. Each row will have show/movie information such as title, cast, director, etc. Some basic functionalities for our web application include search, filter, and add shows/movies to each user’s “favorite” list. Some interesting features will allow users to compare two shows/movies and also write their own reviews.
