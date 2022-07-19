@@ -5,13 +5,17 @@ import './App.css';
 
 function App() {
   const [title, setTitle] = useState('');
+  const [showInfo, setShowInfo] = useState([])
 
   const submitSearch = () => {
+    // console.log(title)
     Axios.get('http://localhost:3002/api/get', {
-      title: title
+      params: {
+        show_title : title
+      }
     })
     .then((response) => {
-      console.log(response)
+      setShowInfo(response.data)
     })
   }
 
@@ -26,6 +30,19 @@ function App() {
         </input>
         <button onClick={submitSearch}> Submit</button>
       </div>
+      
+      {showInfo.map((val) => {
+        return (
+          <div className= "form1_result">
+            <h2>Show Name: {val.title}</h2>
+          </div>
+        );
+
+      })}
+      
+
+
+
     </div>
   );
 }
