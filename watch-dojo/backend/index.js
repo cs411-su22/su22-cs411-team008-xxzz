@@ -21,7 +21,7 @@ app.use(express.json());
 app.get("/api/get", (require, response) => {
     const name = require.query.show_title;
     console.log(require);
-    const sqlSelect = `SELECT * FROM Movie_TV WHERE title = '${name}'`;
+    const sqlSelect = `SELECT * FROM Movie_TV WHERE REPLACE(lower(title), ' ', '') LIKE REPLACE(lower('%${name}%'), ' ', '')`;
     db.query(sqlSelect, (err, result) => {
         console.log(err);
         response.send(result);
