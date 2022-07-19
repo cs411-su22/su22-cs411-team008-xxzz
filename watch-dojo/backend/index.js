@@ -8,7 +8,6 @@ const cors = require("cors");
 
 var db = mysql.createConnection({
   host:'34.71.145.75',
-  port: 3306,
   user: 'root',
   password: 'watchdojo',
   database: 'watchdojo'
