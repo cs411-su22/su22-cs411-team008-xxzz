@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 const app = express();
 const mysql = require("mysql");
 const cors = require("cors");
+const { response } = require("express");
 
 
 var db = mysql.createConnection({
@@ -40,14 +41,22 @@ app.post("/api/create_user", (require, response) => {
 app.get("/api/login", (require, response) => {
     const user = require.query.user_name;
     const password = require.query.password;
-    console.log(user)
-    console.log(password)
     const sqlSelect = `SELECT * FROM Login WHERE username = '${user}' AND password = '${password}'`;
     db.query(sqlSelect, (err, result) => {
         console.log(err);
         response.send(result);
     });
 });
+
+app.post("/api/list", (require, response) => {
+    const new_list = require.body.new_list_name;
+    const creater = require.body.list_creater;
+    const sqlSelect = `INSERT INTO Watch_list(username, list_name) VALUES('${creater}','${new_list}')`;
+    db.query(sqlSelect, (err, result) => {
+        console.log(err);
+        response.send(result);
+    })
+})
 
 app.listen(3002, () => {
     console.log("success");

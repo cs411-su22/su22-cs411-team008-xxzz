@@ -10,6 +10,7 @@ function App() {
   const [newPassword, setNewPassword] = useState('');
   const [loginUser, setLoginUser] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
+  const [listname, setListName] = useState('');
 
   const submitSearch = () => {
     // console.log(title)
@@ -46,6 +47,13 @@ function App() {
         setLoginUser("")
         setLoginPassword("")
       }
+    })
+  }
+
+  const submitList = () => {
+    Axios.post('http://localhost:3002/api/list', {
+        new_list_name : listname,
+        list_creater : loginUser
     })
   }
 
@@ -95,6 +103,15 @@ function App() {
         }}> 
         </input>
         <button onClick={submitLogin}>Login</button>
+      </div>
+
+      <div className="login">
+        <label>List name</label>
+        <input type='text' name='new_list_name' onChange={(e) => {
+          setListName(e.target.value)
+        }}> 
+        </input>
+        <button onClick={submitList}>Create List</button>
       </div>
       
 
