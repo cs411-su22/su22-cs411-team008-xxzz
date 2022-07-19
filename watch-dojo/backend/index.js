@@ -20,7 +20,6 @@ app.use(express.json());
 
 app.get("/api/get", (require, response) => {
     const name = require.query.show_title;
-    console.log(require);
     const sqlSelect = `SELECT * FROM Movie_TV WHERE REPLACE(lower(title), ' ', '') LIKE REPLACE(lower('%${name}%'), ' ', '')`;
     db.query(sqlSelect, (err, result) => {
         console.log(err);
@@ -28,6 +27,27 @@ app.get("/api/get", (require, response) => {
     });
 });
 
+app.post("/api/create_user", (require, response) => {
+    const new_user = require.body.new_user_name;
+    const new_password = require.body.new_password;
+    const sqlSelect = `INSERT INTO Login VALUES('${new_user}','${new_password}')`;
+    db.query(sqlSelect, (err, result) => {
+        console.log(err);
+        response.send(result);
+    });
+});
+
+app.get("/api/login", (require, response) => {
+    const user = require.query.user_name;
+    const password = require.query.password;
+    console.log(user)
+    console.log(password)
+    const sqlSelect = `SELECT * FROM Login WHERE username = '${user}' AND password = '${password}'`;
+    db.query(sqlSelect, (err, result) => {
+        console.log(err);
+        response.send(result);
+    });
+});
 
 app.listen(3002, () => {
     console.log("success");
