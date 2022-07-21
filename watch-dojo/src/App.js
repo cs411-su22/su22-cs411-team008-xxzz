@@ -12,7 +12,9 @@ function App() {
   const [loginPassword, setLoginPassword] = useState('');
   const [listname, setListName] = useState('');
   const [showTable, setShowTable] = useState(false);
-  const [listInfo, setListInfo] = useState([])
+  const [listInfo, setListInfo] = useState([]);
+  const [newListName, setNewListName] = useState('');
+  const [listID, setListID] = useState('');
 
   const submitSearch = () => {
     // console.log(title)
@@ -67,6 +69,14 @@ function App() {
         }
       }).then((response) => {
         setListInfo(response.data)
+        console.log(response.data)
+      })
+    }
+
+    const updateTable = () => {
+      Axios.put('http://localhost:3002/api/update_list', {
+          ID : listID,
+          Name: newListName
       })
     }
 
@@ -107,8 +117,8 @@ function App() {
 
       <div className="login">
         <label>User name</label>
-        <input type='text' name='user_name' onChange={(e) => {
-          setLoginUser(e.target.value)
+          <input type='text' name='user_name' onChange={(e) => {
+            setLoginUser(e.target.value)
         }}> 
         </input>
         <label>Password</label>
@@ -129,16 +139,16 @@ function App() {
           <tr>
             <th>List ID</th>
             <th>List Name</th>
-            <th>Action1</th>
-            <th>Action2</th>
+            {/* <th>Action1</th>
+            <th>Action2</th> */}
           </tr>
             {listInfo.map((val) => {
             return (
               <tr>
                 <th>{val.list_id}</th>
-                <input type='text' name='list_name' value={val.list_name}></input>
-                <button>Update</button>
-                <button>Enter</button>
+                <th>{val.list_name}</th>
+                {/* <button onClick={}>Update</button>
+                <button>Enter</button> */}
               </tr>
             );
           })}
@@ -154,6 +164,22 @@ function App() {
         }}> 
         </input>
         <button onClick={submitList}>Create List</button>
+      </div>
+
+
+
+      <div className="update_list">
+        <label>List ID</label>
+        <input type='text' name='id' onChange={(e) => {
+          setListID(e.target.value)
+        }}> 
+        </input>
+        <label>New List Name</label>
+        <input type='text' name='name' onChange={(e) => {
+          setNewListName(e.target.value)
+        }}> 
+        </input>
+        <button onClick={updateTable}>Update List</button>
       </div>
       
 

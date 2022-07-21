@@ -68,6 +68,16 @@ app.get("/api/get_list", (require, response) => {
     });
 });
 
+app.put("/api/update_list", (require, response) => {
+    const list_id = require.body.ID
+    const list_name = require.body.Name
+    const sqlSelect = `UPDATE Watch_list SET list_name = '${list_name}' WHERE list_id = ${list_id}`;
+    db.query(sqlSelect, (err, result) => {
+        console.log(err);
+        response.send(result);
+    });
+});
+
 app.listen(3002, () => {
     console.log("success");
 })
