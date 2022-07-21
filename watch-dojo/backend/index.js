@@ -48,7 +48,7 @@ app.get("/api/login", (require, response) => {
     });
 });
 
-app.post("/api/list", (require, response) => {
+app.post("/api/create_list", (require, response) => {
     const new_list = require.body.new_list_name;
     const creater = require.body.list_creater;
     const sqlSelect = `INSERT INTO Watch_list(username, list_name) VALUES('${creater}','${new_list}')`;
@@ -57,6 +57,16 @@ app.post("/api/list", (require, response) => {
         response.send(result);
     })
 })
+
+
+app.get("/api/get_list", (require, response) => {
+    const user = require.query.user_name;
+    const sqlSelect = `SELECT list_id, list_name FROM Watch_list WHERE username = '${user}'`;
+    db.query(sqlSelect, (err, result) => {
+        console.log(err);
+        response.send(result);
+    });
+});
 
 app.listen(3002, () => {
     console.log("success");

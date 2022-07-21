@@ -11,6 +11,8 @@ function App() {
   const [loginUser, setLoginUser] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
   const [listname, setListName] = useState('');
+  const [showTable, setShowTable] = useState(false);
+  const [listInfo, setListInfo] = useState([])
 
   const submitSearch = () => {
     // console.log(title)
@@ -51,11 +53,23 @@ function App() {
   }
 
   const submitList = () => {
-    Axios.post('http://localhost:3002/api/list', {
+    Axios.post('http://localhost:3002/api/create_list', {
         new_list_name : listname,
         list_creater : loginUser
     })
   }
+
+  const createTableView = () => {
+      setShowTable((s) => !s)
+      Axios.get('http://localhost:3002/api/get_list', {
+        params: {
+          user_name : loginUser
+        }
+      }).then((response) => {
+        setListInfo(response.data)
+      })
+    }
+
 
   return (
     <div className="App">
@@ -105,7 +119,35 @@ function App() {
         <button onClick={submitLogin}>Login</button>
       </div>
 
-      <div className="login">
+
+      {/* Create list interface */}
+      <button onClick={createTableView}>Show User Favorite List</button>
+
+      {/* table of lists */}
+      <div className="list_interface" style={{ visibility: showTable ? "visible" : "hidden" }}>
+        <table className="list_table">
+          <tr>
+            <th>List ID</th>
+            <th>List Name</th>
+            <th>Action1</th>
+            <th>Action2</th>
+          </tr>
+            {listInfo.map((val) => {
+            return (
+              <tr>
+                <th>{val.list_id}</th>
+                <input type='text' name='list_name' value={val.list_name}></input>
+                <button>Update</button>
+                <button>Enter</button>
+              </tr>
+            );
+          })}
+        </table>
+      </div>
+
+
+
+      <div className="create_list">
         <label>List name</label>
         <input type='text' name='new_list_name' onChange={(e) => {
           setListName(e.target.value)
