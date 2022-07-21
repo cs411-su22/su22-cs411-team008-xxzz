@@ -76,7 +76,8 @@ function App() {
     const updateTable = () => {
       Axios.put('http://localhost:3002/api/update_list', {
           ID : listID,
-          Name: newListName
+          Name: newListName,
+          User: loginUser
       })
     }
 
