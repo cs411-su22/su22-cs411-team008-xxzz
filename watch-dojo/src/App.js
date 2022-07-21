@@ -15,6 +15,10 @@ function App() {
   const [listInfo, setListInfo] = useState([]);
   const [newListName, setNewListName] = useState('');
   const [listID, setListID] = useState('');
+  const [showTable1, setShowTable1] = useState(false);
+  const [query1Info, setquery1Info] = useState([]);
+  const [showTable2, setShowTable2] = useState(false);
+  const [query2Info, setquery2Info] = useState([]);
 
   const submitSearch = () => {
     // console.log(title)
@@ -72,6 +76,16 @@ function App() {
         console.log(response.data)
       })
     }
+
+    const createTableView1 = () => {
+      setShowTable1((s) => !s)
+      Axios.get('http://localhost:3002/api/get_query1', {
+      }).then((response) => {
+        setquery1Info(response.data)
+        console.log(response.data)
+      })
+    }
+
 
     const updateTable = () => {
       Axios.put('http://localhost:3002/api/update_list', {
@@ -140,16 +154,12 @@ function App() {
           <tr>
             <th>List ID</th>
             <th>List Name</th>
-            {/* <th>Action1</th>
-            <th>Action2</th> */}
           </tr>
             {listInfo.map((val) => {
             return (
               <tr>
                 <th>{val.list_id}</th>
                 <th>{val.list_name}</th>
-                {/* <button onClick={}>Update</button>
-                <button>Enter</button> */}
               </tr>
             );
           })}
@@ -184,6 +194,29 @@ function App() {
       </div>
       
 
+      {/* advanced query section */}
+      <button onClick={createTableView1}>Show result from query 1</button>
+
+      {/* table of lists */}
+      <div className="query1" style={{ visibility: showTable1 ? "visible" : "hidden" }}>
+        <label>Find actors and actresses cast the top 15 largest number of movies that are released after 2008</label>
+        <table className="list_table">
+          <tr>
+            <th>First Name</th>
+            <th>List Name</th>
+            <th>Number of movies </th>
+          </tr>
+            {query1Info.map((val) => {
+            return (
+              <tr>
+                <th>{val.first_name}</th>
+                <th>{val.last_name}</th>
+                <th>{val.num_movies}</th>
+              </tr>
+            );
+          })}
+        </table>
+      </div>
     </div>
   );
 }

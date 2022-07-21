@@ -68,6 +68,14 @@ app.get("/api/get_list", (require, response) => {
     });
 });
 
+app.get("/api/get_query1", (require, response) => {
+    const sqlSelect = `SELECT first_name, last_name, COUNT(show_id) AS num_movie FROM Movie_TV NATURAL JOIN Casted_by NATURAL JOIN Cast WHERE year_released >= 2008 AND category = 'Movie' GROUP BY cast_id ORDER BY COUNT(show_id) DESC LIMIT 15`;
+    db.query(sqlSelect, (err, result) => {
+        console.log(err);
+        response.send(result);
+    });
+});
+
 app.put("/api/update_list", (require, response) => {
     const list_id = require.body.ID
     const list_name = require.body.Name
