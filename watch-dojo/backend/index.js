@@ -68,6 +68,27 @@ app.get("/api/get_list", (require, response) => {
     });
 });
 
+app.put("/api/update_list", (require, response) => {
+    const list_id = require.body.ID
+    const list_name = require.body.Name
+    const user_name = require.body.User
+    const sqlSelect = `UPDATE Watch_list SET list_name = '${list_name}' WHERE list_id = ${list_id} AND username = '${user_name}'`;
+    db.query(sqlSelect, (err, result) => {
+        console.log(err);
+        response.send(result);
+    });
+});
+
+app.delete("/api/delete_list", (require, response) => {
+    const list_id = require.query.list_ID
+    const user_name = require.query.curr_user
+    const sqlSelect = `DELETE FROM Watch_list WHERE list_id = ${list_id} AND username = '${user_name}'`;
+    db.query(sqlSelect, (err, result) => {
+        console.log(err);
+        response.send(result);
+    });
+});
+
 app.get("/api/get_query1", (require, response) => {
     const sqlSelect = `SELECT first_name, last_name, COUNT(show_id) AS num_movie FROM Movie_TV NATURAL JOIN Casted_by NATURAL JOIN Cast WHERE year_released >= 2008 AND category = 'Movie' GROUP BY cast_id ORDER BY COUNT(show_id) DESC LIMIT 15`;
     db.query(sqlSelect, (err, result) => {
@@ -76,11 +97,8 @@ app.get("/api/get_query1", (require, response) => {
     });
 });
 
-app.put("/api/update_list", (require, response) => {
-    const list_id = require.body.ID
-    const list_name = require.body.Name
-    const user_name = require.body.User
-    const sqlSelect = `UPDATE Watch_list SET list_name = '${list_name}' WHERE list_id = ${list_id} AND username = '${user_name}'`;
+app.get("/api/get_query2", (require, response) => {
+    const sqlSelect = `SELECT first_name, last_name, rating, COUNT(show_id) AS num_all FROM Movie_TV NATURAL JOIN Directed_by NATURAL JOIN Director d WHERE country = 'United States' GROUP BY rating, director_id ORDER BY COUNT(show_id) DESC LIMIT 15`;
     db.query(sqlSelect, (err, result) => {
         console.log(err);
         response.send(result);

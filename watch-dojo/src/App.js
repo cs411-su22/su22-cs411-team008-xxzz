@@ -63,6 +63,14 @@ function App() {
         new_list_name : listname,
         list_creater : loginUser
     })
+    .then((response) => {
+      if (response.data.length === 1){
+        alert("Create successfully");
+      } else if (loginUser.length === 0) {
+        alert("Please login first");
+        setLoginUser("")
+      }
+    })
   }
 
   const createTableView = () => {
@@ -77,6 +85,31 @@ function App() {
       })
     }
 
+
+    const updateTable = () => {
+      Axios.put('http://localhost:3002/api/update_list', {
+          ID : listID,
+          Name: newListName,
+          User: loginUser
+      })
+    }
+
+    const deleteTable = () => {
+      Axios.delete('http://localhost:3002/api/delete_list', {
+          params: {
+            list_ID : listID,
+            curr_user: loginUser
+          }
+      })
+      .then((response) => {
+        if (loginUser.length === 0) {
+          alert("Please login first");
+          setLoginUser("")
+        }
+        // what if the list_id do not exist?
+      })
+    }
+
     const createTableView1 = () => {
       setShowTable1((s) => !s)
       Axios.get('http://localhost:3002/api/get_query1', {
@@ -86,12 +119,12 @@ function App() {
       })
     }
 
-
-    const updateTable = () => {
-      Axios.put('http://localhost:3002/api/update_list', {
-          ID : listID,
-          Name: newListName,
-          User: loginUser
+    const createTableView2 = () => {
+      setShowTable2((s) => !s)
+      Axios.get('http://localhost:3002/api/get_query2', {
+      }).then((response) => {
+        setquery2Info(response.data)
+        console.log(response.data)
       })
     }
 
@@ -192,6 +225,15 @@ function App() {
         </input>
         <button onClick={updateTable}>Update List</button>
       </div>
+
+      <div className="delete_list">
+        <label>List ID</label>
+        <input type='text' name='list_ID' onChange={(e) => {
+          setListID(e.target.value)
+        }}> 
+        </input>
+        <button onClick={deleteTable}>Delete List</button>
+      </div>
       
 
       {/* advanced query section */}
@@ -204,14 +246,40 @@ function App() {
           <tr>
             <th>First Name</th>
             <th>List Name</th>
-            <th>Number of movies </th>
+            <th>Number of Movies </th>
           </tr>
             {query1Info.map((val) => {
             return (
               <tr>
                 <th>{val.first_name}</th>
                 <th>{val.last_name}</th>
-                <th>{val.num_movies}</th>
+                <th>{val.num_movie}</th>
+              </tr>
+            );
+          })}
+        </table>
+      </div>
+
+      {/* advanced query section */}
+      <button onClick={createTableView2}>Show result from query 2</button>
+
+      {/* table of lists */}
+      <div className="query2" style={{ visibility: showTable2 ? "visible" : "hidden" }}>
+        <label>Find how many different ratings of American movies and shows each director have</label>
+        <table className="list_table">
+          <tr>
+            <th>First Name</th>
+            <th>List Name</th>
+            <th>Rating</th>
+            <th>Number of Movies and Shows</th>
+          </tr>
+            {query2Info.map((val) => {
+            return (
+              <tr>
+                <th>{val.first_name}</th>
+                <th>{val.last_name}</th>
+                <th>{val.rating}</th>
+                <th>{val.num_all}</th>
               </tr>
             );
           })}
