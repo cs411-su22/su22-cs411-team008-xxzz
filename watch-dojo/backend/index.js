@@ -82,7 +82,7 @@ app.put("/api/update_list", (require, response) => {
 app.delete("/api/delete_list", (require, response) => {
     const list_id = require.query.list_ID
     const user_name = require.query.curr_user
-    const sqlSelect = `DELETE FROM Watch_list WHERE list_id = ${list_id} AND username = '${user_name}'`;
+    const sqlSelect = `DELETE FROM Watch_list WHERE list_id = '${list_id}' AND username = '${user_name}'`;
     db.query(sqlSelect, (err, result) => {
         console.log(err);
         response.send(result);
@@ -104,6 +104,51 @@ app.get("/api/get_query2", (require, response) => {
         response.send(result);
     });
 });
+
+
+// Review Table Operation Start
+app.get("/api/get_review_table", (require, response) => {
+    const user = require.query.user_name;
+    const sqlSelect = `SELECT show_id, reviews FROM Review WHERE username = '${user}'`;
+    db.query(sqlSelect, (err, result) => {
+        console.log(err);
+        response.send(result);
+    });
+});
+
+app.post("/api/create_review", (require, response) => {
+    const show_id = require.body.review_show_id;
+    const content = require.body.review_content;
+    const creater = require.body.review_creater;
+    const sqlSelect = `INSERT INTO Review(username, show_id, reviews) VALUES('${creater}','${show_id}','${content}')`;
+    // console.log(response);
+    db.query(sqlSelect, (err, result) => {
+        console.log(err);
+        response.send(result);
+    });
+});
+
+app.put("/api/update_review", (require, response) => {
+    const show_id = require.body.show_id;
+    const content = require.body.new_content;
+    const user_name = require.body.user;
+    const sqlSelect = `UPDATE Review SET reviews = '${content}' WHERE show_id = '${show_id}' AND username = '${user_name}'`;
+    db.query(sqlSelect, (err, result) => {
+        console.log(err);
+        response.send(result);
+    });
+});
+
+app.delete("/api/delete_review", (require, response) => {
+    const show_id = require.query.review_show_id;
+    const user_name = require.query.curr_user;
+    const sqlSelect = `DELETE FROM Review WHERE show_id = '${show_id}' AND username = '${user_name}'`;
+    db.query(sqlSelect, (err, result) => {
+        console.log(err);
+        response.send(result);
+    });
+});
+// Review Table Operation End
 
 app.listen(3002, () => {
     console.log("success");

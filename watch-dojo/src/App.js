@@ -19,6 +19,11 @@ function App() {
   const [query1Info, setquery1Info] = useState([]);
   const [showTable2, setShowTable2] = useState(false);
   const [query2Info, setquery2Info] = useState([]);
+  const [showReviewTable, setShowReviewTable] = useState(false);
+  const [reviewTableInfo, setReviewTableInfo] = useState([]);
+  const [reviewContent, setReviewContent] = useState('');
+  const [reviewShowID, setReviewShowID] = useState('');
+  const [newReviewContent, setNewReviewContent] = useState('');
 
   const submitSearch = () => {
     // console.log(title)
@@ -86,48 +91,98 @@ function App() {
     }
 
 
-    const updateTable = () => {
-      Axios.put('http://localhost:3002/api/update_list', {
-          ID : listID,
-          Name: newListName,
-          User: loginUser
-      })
-    }
+  const updateTable = () => {
+    Axios.put('http://localhost:3002/api/update_list', {
+        ID : listID,
+        Name: newListName,
+        User: loginUser
+    })
+  }
 
-    const deleteTable = () => {
-      Axios.delete('http://localhost:3002/api/delete_list', {
-          params: {
-            list_ID : listID,
-            curr_user: loginUser
-          }
-      })
-      .then((response) => {
-        if (loginUser.length === 0) {
-          alert("Please login first");
-          setLoginUser("")
+  const deleteTable = () => {
+    Axios.delete('http://localhost:3002/api/delete_list', {
+        params: {
+          list_ID : listID,
+          curr_user: loginUser
         }
-        // what if the list_id do not exist?
-      })
-    }
+    })
+    .then((response) => {
+      if (loginUser.length === 0) {
+        alert("Please login first");
+        setLoginUser("")
+      }
+    })
+  }
 
-    const createTableView1 = () => {
-      setShowTable1((s) => !s)
-      Axios.get('http://localhost:3002/api/get_query1', {
-      }).then((response) => {
-        setquery1Info(response.data)
-        console.log(response.data)
-      })
-    }
+  const createTableView1 = () => {
+    setShowTable1((s) => !s)
+    Axios.get('http://localhost:3002/api/get_query1', {
+    }).then((response) => {
+      setquery1Info(response.data)
+      console.log(response.data)
+    })
+  }
 
-    const createTableView2 = () => {
-      setShowTable2((s) => !s)
-      Axios.get('http://localhost:3002/api/get_query2', {
-      }).then((response) => {
-        setquery2Info(response.data)
-        console.log(response.data)
-      })
-    }
+  const createTableView2 = () => {
+    setShowTable2((s) => !s)
+    Axios.get('http://localhost:3002/api/get_query2', {
+    }).then((response) => {
+      setquery2Info(response.data)
+      console.log(response.data)
+    })
+  }
 
+
+// Review Table Operation Start
+  const createReviewTableView = () => {
+    setShowReviewTable((s) => !s)
+    Axios.get('http://localhost:3002/api/get_review_table', {
+      params: {
+        user_name : loginUser
+      }
+    }).then((response) => {
+      setReviewTableInfo(response.data)
+      console.log(response.data)
+    })
+  }
+  
+  const submitReview = () => {
+    Axios.post('http://localhost:3002/api/create_review', {
+        review_show_id : reviewShowID,
+        review_content : reviewContent,
+        review_creater : loginUser
+    })
+    .then((response) => {
+      if (loginUser.length === 0) {
+        alert("Please login first");
+        setLoginUser("")
+      }
+    })
+  }
+
+  const updateReview = () => {
+    Axios.put('http://localhost:3002/api/update_review', {
+      show_id : reviewShowID,
+      new_content : newReviewContent,
+      user : loginUser
+    })
+  }
+
+  const deleteReview = () => {
+    Axios.delete('http://localhost:3002/api/delete_review', {
+        params: {
+          review_show_id : reviewShowID,
+          curr_user: loginUser
+        }
+    })
+    .then((response) => {
+      if (loginUser.length === 0) {
+        alert("Please login first");
+        setLoginUser("")
+      }
+    })
+  }
+  // Review Table Operation End
 
   return (
     <div className="App">
@@ -234,6 +289,65 @@ function App() {
         </input>
         <button onClick={deleteTable}>Delete List</button>
       </div>
+
+      
+      {/* Create Review Table interface */}
+      <button onClick={createReviewTableView}>Show User Review</button>
+
+      <div className="review_table_interface" style={{ visibility: showReviewTable ? "visible" : "hidden" }}>
+        <table className="review_table">
+          <tr>
+            <th>Show ID</th>
+            <th>Review</th>
+          </tr>
+            {reviewTableInfo.map((val) => {
+            return (
+              <tr>
+                <th>{val.show_id}</th>
+                <th>{val.reviews}</th>
+              </tr>
+            );
+          })}
+        </table>
+      </div>
+
+      <div className="create_review">
+        <label>Show ID</label>
+        <input type='text' name='review_show_id' onChange={(e) => {
+          setReviewShowID(e.target.value)
+        }}> 
+        </input>
+        <label>Review Content</label>
+        <input type='text' name='review_content' onChange={(e) => {
+          setReviewContent(e.target.value)
+        }}> 
+        </input>
+        <button onClick={submitReview}>Create Review</button>
+      </div>
+      
+      <div className="update_review">
+        <label>Show ID</label>
+        <input type='text' name='show_id' onChange={(e) => {
+          setReviewShowID(e.target.value)
+        }}> 
+        </input>
+        <label>Review Content</label>
+        <input type='text' name='new_review_content' onChange={(e) => {
+          setNewReviewContent(e.target.value)
+        }}> 
+        </input>
+        <button onClick={updateReview}>Update Review</button>
+      </div>
+
+      <div className="delete_review">
+        <label>Review Show ID</label>
+        <input type='text' name='review_show_id' onChange={(e) => {
+          setReviewShowID(e.target.value)
+        }}> 
+        </input>
+        <button onClick={deleteReview}>Delete Review</button>
+      </div>
+      {/*Review Table Operation End*/}
       
 
       {/* advanced query section */}
