@@ -37,6 +37,15 @@
   }
 }
 
+.search_table {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.detail_table {
+  margin-left: auto;
+  margin-right: auto;
+}
 
 .list_table {
   margin-left: auto;

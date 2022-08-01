@@ -24,9 +24,14 @@ function App() {
   const [reviewContent, setReviewContent] = useState('');
   const [reviewShowID, setReviewShowID] = useState('');
   const [newReviewContent, setNewReviewContent] = useState('');
+  const [showID, setShowID] = useState('');
+  const [searchTable, setSearchTable] = useState(false);
+  const [listDetail, setListDetail] = useState([]);
+  const [detailTable, setDetailTable] = useState(false);
 
   const submitSearch = () => {
     // console.log(title)
+    setSearchTable((s) => !s)
     Axios.get('http://localhost:3002/api/get', {
       params: {
         show_title : title
@@ -90,12 +95,54 @@ function App() {
       })
     }
 
+    const createTableContentView = () => {
+      setDetailTable((s) => !s)
+      Axios.get('http://localhost:3002/api/get_list_detail', {
+        params: {
+          list_id : listID
+        }
+      }).then((response) => {
+        setListDetail(response.data)
+        console.log(response.data)
+      })
+    }
+
 
   const updateTable = () => {
     Axios.put('http://localhost:3002/api/update_list', {
         ID : listID,
         Name: newListName,
         User: loginUser
+    })
+  }
+
+  //add movie to list
+  const addToList = () => {
+    Axios.put('http://localhost:3002/api/add_movie_to_list', {
+        ID : listID,
+        ShowID: showID
+    })
+    .then((response) => {
+      if (loginUser.length === 0) {
+        alert("Please login first");
+        setLoginUser("")
+      }
+    })
+  }
+
+  //delete movie from list
+  const deleteFromList = () => {
+    Axios.delete('http://localhost:3002/api/delete_movie_from_list', {
+        params: {
+          ID : listID,
+          ShowID: showID
+        }
+    })
+    .then((response) => {
+      if (loginUser.length === 0) {
+        alert("Please login first");
+        setLoginUser("")
+      }
     })
   }
 
@@ -195,15 +242,35 @@ function App() {
         </input>
         <button onClick={submitSearch}> Submit</button>
       </div>
-      
-      {showInfo.map((val) => {
-        return (
-          <div className= "search_result">
-            <h2>Show Name: {val.title}</h2>
-          </div>
-        );
-      })}
-      
+
+      {/* Create Search Table interface */}
+      <div className="search_table_interface" style={{ visibility: searchTable ? "visible" : "hidden" }}>
+        <table className="search_table">
+          <tr>
+            <th>Show ID</th>
+            <th>Show Title</th>
+            <th>Year Released</th>
+            <th>Type</th>
+            <th>Country</th>
+            <th>Rating</th>
+            <th>Duration</th>
+          </tr>
+          {showInfo.map((val) => {
+            return (
+              <tr>
+                <td>{val.show_id}</td>
+                <td>{val.title}</td>
+                <td>{val.year_released}</td>
+                <td>{val.category}</td>
+                <td>{val.country}</td>
+                <td>{val.rating}</td>
+                <td>{val.duration}</td>
+              </tr>
+            );
+          })}   
+        </table>
+      </div>
+
       <div className="create_user">
         <label>User name</label>
         <input type='text' name='new_user_name' onChange={(e) => {
@@ -254,6 +321,23 @@ function App() {
         </table>
       </div>
 
+      {/* Create list_content interface */}
+      <label>List ID</label>
+          <input type='text' name='list_id' onChange={(e) => {
+            setListID(e.target.value)
+        }}> 
+        </input>
+      <button onClick={createTableContentView}>Show List Detail</button>
+
+      {/* table of movies in a specific list */}
+      <div className="list_content_interface" style={{ visibility: detailTable ? "visible" : "hidden" }}>
+            {listDetail.map((val) => {
+            return (
+                <h4>{val.title}</h4>
+            );
+          })}
+      </div>
+
 
 
       <div className="create_list">
@@ -279,6 +363,21 @@ function App() {
         }}> 
         </input>
         <button onClick={updateTable}>Update List</button>
+      </div>
+      
+      <div className="update_list_content">
+        <label>List ID</label>
+        <input type='text' name='id' onChange={(e) => {
+          setListID(e.target.value)
+        }}> 
+        </input>
+        <label>Show ID</label>
+        <input type='text' name='movie' onChange={(e) => {
+          setShowID(e.target.value)
+        }}> 
+        </input>
+        <button onClick={addToList}>Add to List</button>
+        <button onClick={deleteFromList}>Delete from List</button>
       </div>
 
       <div className="delete_list">

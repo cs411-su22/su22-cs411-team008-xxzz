@@ -68,11 +68,42 @@ app.get("/api/get_list", (require, response) => {
     });
 });
 
+app.get("/api/get_list_detail", (require, response) => {
+    const listed_id = require.query.list_id;
+    const sqlSelect = `SELECT title FROM Existed_in NATURAL JOIN Movie_TV WHERE listed_id = '${listed_id}'`;
+    db.query(sqlSelect, (err, result) => {
+        console.log(err);
+        response.send(result);
+    });
+});
+
 app.put("/api/update_list", (require, response) => {
     const list_id = require.body.ID
     const list_name = require.body.Name
     const user_name = require.body.User
     const sqlSelect = `UPDATE Watch_list SET list_name = '${list_name}' WHERE list_id = ${list_id} AND username = '${user_name}'`;
+    db.query(sqlSelect, (err, result) => {
+        console.log(err);
+        response.send(result);
+    });
+});
+
+//add movies to list
+app.put("/api/add_movie_to_list", (require, response) => {
+    const listed_id = require.body.ID
+    const show_id = require.body.ShowID
+    const sqlSelect = `INSERT INTO Existed_in VALUES (${listed_id},${show_id})`;
+    db.query(sqlSelect, (err, result) => {
+        console.log(err);
+        response.send(result);
+    });
+});
+
+//delete movies from list
+app.delete("/api/delete_movie_from_list", (require, response) => {
+    const listed_id = require.query.ID
+    const show_id = require.query.ShowID
+    const sqlSelect = `DELETE FROM Existed_in WHERE listed_id = ${listed_id} AND show_id = ${show_id}`;
     db.query(sqlSelect, (err, result) => {
         console.log(err);
         response.send(result);
