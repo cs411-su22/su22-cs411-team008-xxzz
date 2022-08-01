@@ -16,8 +16,10 @@ function App() {
   const [newListName, setNewListName] = useState('');
   const [listID, setListID] = useState('');
   const [showTable1, setShowTable1] = useState(false);
+  const [query1Year, setquery1Year] = useState('');
   const [query1Info, setquery1Info] = useState([]);
   const [showTable2, setShowTable2] = useState(false);
+  const [query2Name, setquery2Name] = useState('');
   const [query2Info, setquery2Info] = useState([]);
   const [showReviewTable, setShowReviewTable] = useState(false);
   const [reviewTableInfo, setReviewTableInfo] = useState([]);
@@ -28,6 +30,7 @@ function App() {
   const [searchTable, setSearchTable] = useState(false);
   const [listDetail, setListDetail] = useState([]);
   const [detailTable, setDetailTable] = useState(false);
+
 
   const submitSearch = () => {
     // console.log(title)
@@ -164,6 +167,9 @@ function App() {
   const createTableView1 = () => {
     setShowTable1((s) => !s)
     Axios.get('http://localhost:3002/api/get_query1', {
+      params: {
+        year: query1Year
+      }
     }).then((response) => {
       setquery1Info(response.data)
       console.log(response.data)
@@ -173,6 +179,9 @@ function App() {
   const createTableView2 = () => {
     setShowTable2((s) => !s)
     Axios.get('http://localhost:3002/api/get_query2', {
+      params: {
+        name: query2Name
+      }
     }).then((response) => {
       setquery2Info(response.data)
       console.log(response.data)
@@ -235,7 +244,7 @@ function App() {
     <div className="App">
       <h1>Official application for Movie/TV database</h1>
       <div className="search_function">
-        <label>Movie/Show Title</label>
+        <label>Movie/Show Title </label>
         <input type='text' name='title' onChange={(e) => {
           setTitle(e.target.value)
         }}> 
@@ -272,12 +281,12 @@ function App() {
       </div>
 
       <div className="create_user">
-        <label>User name</label>
+        <label>User name </label>
         <input type='text' name='new_user_name' onChange={(e) => {
           setNewUser(e.target.value)
         }}> 
         </input>
-        <label>Password</label>
+        <label>Password </label>
         <input type='text' name='new_password' onChange={(e) => {
           setNewPassword(e.target.value)
         }}> 
@@ -286,12 +295,12 @@ function App() {
       </div>
 
       <div className="login">
-        <label>User name</label>
+        <label>User name </label>
           <input type='text' name='user_name' onChange={(e) => {
             setLoginUser(e.target.value)
         }}> 
         </input>
-        <label>Password</label>
+        <label>Password </label>
         <input type='text' name='password' onChange={(e) => {
           setLoginPassword(e.target.value)
         }}> 
@@ -322,7 +331,7 @@ function App() {
       </div>
 
       {/* Create list_content interface */}
-      <label>List ID</label>
+      <label>List ID </label>
           <input type='text' name='list_id' onChange={(e) => {
             setListID(e.target.value)
         }}> 
@@ -333,15 +342,16 @@ function App() {
       <div className="list_content_interface" style={{ visibility: detailTable ? "visible" : "hidden" }}>
             {listDetail.map((val) => {
             return (
-                <h4>{val.title}</h4>
+              <div>
+                <h4>{val.show_id} {val.title}</h4>
+              </div>
             );
           })}
       </div>
 
 
-
       <div className="create_list">
-        <label>List name</label>
+        <label>List name </label>
         <input type='text' name='new_list_name' onChange={(e) => {
           setListName(e.target.value)
         }}> 
@@ -352,12 +362,12 @@ function App() {
 
 
       <div className="update_list">
-        <label>List ID</label>
+        <label>List ID </label>
         <input type='text' name='id' onChange={(e) => {
           setListID(e.target.value)
         }}> 
         </input>
-        <label>New List Name</label>
+        <label>New List Name </label>
         <input type='text' name='name' onChange={(e) => {
           setNewListName(e.target.value)
         }}> 
@@ -366,12 +376,12 @@ function App() {
       </div>
       
       <div className="update_list_content">
-        <label>List ID</label>
+        <label>List ID </label>
         <input type='text' name='id' onChange={(e) => {
           setListID(e.target.value)
         }}> 
         </input>
-        <label>Show ID</label>
+        <label>Show ID </label>
         <input type='text' name='movie' onChange={(e) => {
           setShowID(e.target.value)
         }}> 
@@ -381,7 +391,7 @@ function App() {
       </div>
 
       <div className="delete_list">
-        <label>List ID</label>
+        <label>List ID </label>
         <input type='text' name='list_ID' onChange={(e) => {
           setListID(e.target.value)
         }}> 
@@ -425,12 +435,12 @@ function App() {
       </div>
       
       <div className="update_review">
-        <label>Show ID</label>
+        <label>Show ID </label>
         <input type='text' name='show_id' onChange={(e) => {
           setReviewShowID(e.target.value)
         }}> 
         </input>
-        <label>Review Content</label>
+        <label>Review Content </label>
         <input type='text' name='new_review_content' onChange={(e) => {
           setNewReviewContent(e.target.value)
         }}> 
@@ -439,7 +449,7 @@ function App() {
       </div>
 
       <div className="delete_review">
-        <label>Review Show ID</label>
+        <label>Review Show ID </label>
         <input type='text' name='review_show_id' onChange={(e) => {
           setReviewShowID(e.target.value)
         }}> 
@@ -450,11 +460,18 @@ function App() {
       
 
       {/* advanced query section */}
-      <button onClick={createTableView1}>Show result from query 1</button>
+      <div>
+        <label>Year </label>
+        <input type='text' name='query1' onChange={(e) => {
+            setquery1Year(e.target.value)
+          }}> 
+        </input>
+        <button onClick={createTableView1}>Show result from query 1</button>
+      </div>
 
       {/* table of lists */}
       <div className="query1" style={{ visibility: showTable1 ? "visible" : "hidden" }}>
-        <label>Find actors and actresses cast the top 15 largest number of movies that are released after 2008</label>
+        <label>Find actors and actresses cast the top 15 largest number of movies that are released before {query1Year}</label>
         <table className="list_table">
           <tr>
             <th>First Name</th>
@@ -474,7 +491,15 @@ function App() {
       </div>
 
       {/* advanced query section */}
-      <button onClick={createTableView2}>Show result from query 2</button>
+      <div>
+        <label>Director name</label>
+        <input type='text' name='query2' onChange={(e) => {
+            setquery2Name(e.target.value)
+          }}> 
+        </input>
+        <button onClick={createTableView2}>Show result from query 2</button>
+      </div>
+      
 
       {/* table of lists */}
       <div className="query2" style={{ visibility: showTable2 ? "visible" : "hidden" }}>

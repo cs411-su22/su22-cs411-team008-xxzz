@@ -70,7 +70,7 @@ app.get("/api/get_list", (require, response) => {
 
 app.get("/api/get_list_detail", (require, response) => {
     const listed_id = require.query.list_id;
-    const sqlSelect = `SELECT title FROM Existed_in NATURAL JOIN Movie_TV WHERE listed_id = '${listed_id}'`;
+    const sqlSelect = `SELECT show_id, title FROM Existed_in NATURAL JOIN Movie_TV WHERE listed_id = '${listed_id}'`;
     db.query(sqlSelect, (err, result) => {
         console.log(err);
         response.send(result);
@@ -121,7 +121,8 @@ app.delete("/api/delete_list", (require, response) => {
 });
 
 app.get("/api/get_query1", (require, response) => {
-    const sqlSelect = `SELECT first_name, last_name, COUNT(show_id) AS num_movie FROM Movie_TV NATURAL JOIN Casted_by NATURAL JOIN Cast WHERE year_released >= 2008 AND category = 'Movie' GROUP BY cast_id ORDER BY COUNT(show_id) DESC LIMIT 15`;
+    const year = require.query.year
+    const sqlSelect = `SELECT first_name, last_name, COUNT(show_id) AS num_movie FROM Movie_TV NATURAL JOIN Casted_by NATURAL JOIN Cast WHERE year_released < '${year}' AND category = 'Movie' GROUP BY cast_id ORDER BY COUNT(show_id) DESC LIMIT 15`;
     db.query(sqlSelect, (err, result) => {
         console.log(err);
         response.send(result);
@@ -129,7 +130,8 @@ app.get("/api/get_query1", (require, response) => {
 });
 
 app.get("/api/get_query2", (require, response) => {
-    const sqlSelect = `SELECT first_name, last_name, rating, COUNT(show_id) AS num_all FROM Movie_TV NATURAL JOIN Directed_by NATURAL JOIN Director d WHERE country = 'United States' GROUP BY rating, director_id ORDER BY COUNT(show_id) DESC LIMIT 15`;
+    const director_name = require.query.name
+    const sqlSelect = `SELECT first_name, last_name, rating, COUNT(show_id) AS num_all FROM Movie_TV NATURAL JOIN Directed_by NATURAL JOIN Director d WHERE country = 'United States' AND director_id LIKE REPLACE(lower('%${director_name}%'), ' ', '') GROUP BY rating, director_id ORDER BY COUNT(show_id) DESC`;
     db.query(sqlSelect, (err, result) => {
         console.log(err);
         response.send(result);

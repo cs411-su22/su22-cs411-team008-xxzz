@@ -56,3 +56,33 @@
   margin-left: auto;
   margin-right: auto;
 }
+
+html{
+  background-image: url('../public/tori.jpg'); 
+  background-size: cover;
+}
+html {
+  height: 100%;
+}
+div {
+margin-bottom: 8px;
+}
+input {
+  background-color: #cccc;
+  margin-right: 10px;
+  
+}
+button {
+  background-color: #cccc;
+  margin-right: 10px;
+}
+label {
+  color: #cccc;
+  margin-right: 10px;
+}
+h1 {
+  color: #cccc ;
+}
+tr {
+  background-color: #cccc;
+}
