@@ -34,7 +34,7 @@ app.post("/api/create_user", (require, response) => {
     const sqlSelect = `INSERT INTO Login VALUES('${new_user}','${new_password}')`;
     db.query(sqlSelect, (err, result) => {
         console.log(err);
-        response.send(result);
+        response.send(err);
     });
 });
 

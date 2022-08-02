@@ -50,6 +50,14 @@ function App() {
         new_user_name : newUser,
         new_password : newPassword
     })
+    .then((response) => {
+      console.log(response.data);
+      if (response.data.sqlMessage != null) {
+        alert(response.data.sqlMessage);
+      } else {
+        alert("Create User successfully");
+      }
+    })
   }
 
   const submitLogin = () => {
@@ -60,7 +68,7 @@ function App() {
       }
     })
     .then((response) => {
-      // console.log(response.data)
+      console.log(response.data);
       if (response.data.length === 1){
         alert("Login successfully");
       } else if (response.data.length === 0) {
