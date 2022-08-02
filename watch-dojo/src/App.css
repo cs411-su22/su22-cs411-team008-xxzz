@@ -57,6 +57,11 @@
   margin-right: auto;
 }
 
+.SP_table {
+  margin-left: auto;
+  margin-right: auto;
+}
+
 html{
   background-image: url('../public/tori.jpg'); 
   background-size: cover;

@@ -30,6 +30,8 @@ function App() {
   const [searchTable, setSearchTable] = useState(false);
   const [listDetail, setListDetail] = useState([]);
   const [detailTable, setDetailTable] = useState(false);
+  const [showSP, setSP] = useState(false);
+  const [SPTableInfo, setSPTableInfo] = useState([]);
 
 
   const submitSearch = () => {
@@ -248,6 +250,19 @@ function App() {
   }
   // Review Table Operation End
 
+  // Stored Procedure
+  const createSP = () => {
+    setSP((s) => !s)
+    Axios.get('http://localhost:3002/api/get_stored_procedure', {
+      // params: {
+      //   user_name : loginUser
+      // }
+    }).then((response) => {
+      setSPTableInfo(response.data)
+      console.log(response.data)
+    })
+  }
+
   return (
     <div className="App">
       <h1>Official application for Movie/TV database</h1>
@@ -408,7 +423,7 @@ function App() {
       </div>
 
       
-      {/* Create Review Table interface */}
+      {/* Create Review Table Interface */}
       <button onClick={createReviewTableView}>Show User Review</button>
 
       <div className="review_table_interface" style={{ visibility: showReviewTable ? "visible" : "hidden" }}>
@@ -465,6 +480,28 @@ function App() {
         <button onClick={deleteReview}>Delete Review</button>
       </div>
       {/*Review Table Operation End*/}
+
+      {/* Create Stored Procedure Interface */}
+      <button onClick={createSP}>Show TOP 10 Popular Movies and Shows in Each Rating</button>
+
+      <div className="SP_table_interface" style={{ visibility: showSP ? "visible" : "hidden" }}>
+        <table className="SP_table">
+          <tr>
+            <th>Show ID</th>
+            <th>Type</th>
+            <th>NumReviews</th>
+          </tr>
+            {SPTableInfo.map((val) => {
+            return (
+              <tr>
+                <th>{val.show_id}</th>
+                <th>{val.type}</th>
+                <th>{val.numReviews}</th>
+              </tr>
+            );
+          })}
+        </table>
+      </div>
       
 
       {/* advanced query section */}

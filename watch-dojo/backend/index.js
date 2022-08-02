@@ -183,6 +183,16 @@ app.delete("/api/delete_review", (require, response) => {
 });
 // Review Table Operation End
 
+// Stored Procedure 
+app.get("/api/get_stored_procedure", (require, response) => {
+    // const user = require.query.user_name;
+    const sqlSelect = ``;
+    db.query(sqlSelect, (err, result) => {
+        console.log(err);
+        response.send(result);
+    });
+});
+
 app.listen(3002, () => {
     console.log("success");
 })
