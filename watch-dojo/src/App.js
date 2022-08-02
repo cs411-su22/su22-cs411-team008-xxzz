@@ -258,7 +258,7 @@ function App() {
       //   user_name : loginUser
       // }
     }).then((response) => {
-      setSPTableInfo(response.data)
+      setSPTableInfo(response.data[0])
       console.log(response.data)
     })
   }
@@ -487,16 +487,16 @@ function App() {
       <div className="SP_table_interface" style={{ visibility: showSP ? "visible" : "hidden" }}>
         <table className="SP_table">
           <tr>
-            <th>Show ID</th>
+            <th>Rating</th>
             <th>Type</th>
             <th>NumReviews</th>
           </tr>
             {SPTableInfo.map((val) => {
             return (
               <tr>
-                <th>{val.show_id}</th>
-                <th>{val.type}</th>
-                <th>{val.numReviews}</th>
+                <th>{val.rating}</th>
+                <th>{val.category}</th>
+                <th>{val.NumReviews}</th>
               </tr>
             );
           })}

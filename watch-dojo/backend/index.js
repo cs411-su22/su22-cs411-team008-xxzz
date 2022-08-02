@@ -186,7 +186,7 @@ app.delete("/api/delete_review", (require, response) => {
 // Stored Procedure 
 app.get("/api/get_stored_procedure", (require, response) => {
     // const user = require.query.user_name;
-    const sqlSelect = ``;
+    const sqlSelect = `call watchdojo.count_rating()`;
     db.query(sqlSelect, (err, result) => {
         console.log(err);
         response.send(result);
