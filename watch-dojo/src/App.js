@@ -482,13 +482,14 @@ function App() {
       {/*Review Table Operation End*/}
 
       {/* Create Stored Procedure Interface */}
-      <button onClick={createSP}>Show TOP 10 Popular Movies and Shows in Each Rating</button>
+      <button onClick={createSP}>Show the Most Popular Movies and Shows in Each Rating</button>
 
       <div className="SP_table_interface" style={{ visibility: showSP ? "visible" : "hidden" }}>
         <table className="SP_table">
           <tr>
             <th>Rating</th>
             <th>Type</th>
+            <th>Movie Name</th>
             <th>NumReviews</th>
           </tr>
             {SPTableInfo.map((val) => {
@@ -496,6 +497,7 @@ function App() {
               <tr>
                 <th>{val.rating}</th>
                 <th>{val.category}</th>
+                <th>{val.Movie_Name}</th>
                 <th>{val.NumReviews}</th>
               </tr>
             );
