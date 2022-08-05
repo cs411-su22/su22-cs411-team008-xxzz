@@ -219,6 +219,7 @@ function App() {
         review_creater : loginUser
     })
     .then((response) => {
+      console.log(response);
       if (loginUser.length === 0) {
         alert("Please login first");
         setLoginUser("")
@@ -272,7 +273,7 @@ function App() {
           setTitle(e.target.value)
         }}> 
         </input>
-        <button onClick={submitSearch}> Submit</button>
+        <button onClick={submitSearch}> Search</button>
       </div>
 
       {/* Create Search Table interface */}
